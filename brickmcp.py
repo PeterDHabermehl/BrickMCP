@@ -4,7 +4,7 @@
 import sys
 from TouchStyle import *
 
-class FtcGuiApplication(TxtApplication):
+class FtcGuiApplication(TouchApplication):
     def __init__(self, args):
         TouchApplication.__init__(self, args)
 
