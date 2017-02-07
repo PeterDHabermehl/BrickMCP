@@ -1,6 +1,6 @@
 [app]
 name: BrickMCP
-category: Tool
+category: Tools
 author: Peter Habermehl
 icon: icon.png
 desc: Brickly Master Control Program to organize Brickly projects
