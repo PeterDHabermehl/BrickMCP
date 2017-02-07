@@ -80,11 +80,52 @@ def indexpage():
     elif loc=="fr":      print("<hr /></p><b>Brickly projets trouv&eacute;s sur le TXT:</b><br>Cliquez pour t&eacute;l&eacute;charger, svp.<br><br>")
     else:                print("<hr /></p><b>Brickly projects found on this TXT:</b><br>Click to download.<br><br>")
     
-    for b in bricks:
-        print("<a href='ba.py?file=" + b[0] + "&path=" + brickdir + "&brickpack=True'>" + b[1] + "</a>")
-        print("<a href='index.py?del=" + b[0] + "' onclick='return confirm(" + '"' + "Do you really want to delete "  + b[1] + '?"'+")'><img src='remove.png'></a>")
-        print("<br>")
+    print('<table border="1" rules="rows" cellpadding="5">')
+    print('<thead><tr>')
     
+    if loc=="de":       print('<th>Projekt</th><th>Download</th><th>L&ouml;schen</th></tr>')
+    elif loc=="fr":     print('<th>Projet</th><th>T&eacute;l&eacute;charger</th><th>Supprimer</th></tr>')
+    else:               print('<th>Project</th><th>Download</th><th>Delete</th></tr>')
+    
+    print('</thead>')
+    print('<tbody>')
+    
+    
+    for b in bricks:
+        
+        print('<tr>')
+        
+        # erste Spalte
+        print('<td>')
+        
+        print("<a href='ba.py?file=" + b[0] + "&path=" + brickdir + "&brickpack=True'>" + b[1] + "</a>")
+        
+        print('</td>')
+        
+        #zweite Spalte
+        print('<td>')
+        
+        print("<center><a href='ba.py?file=" + b[0] + "&path=" + brickdir + "&brickpack=True'>" + "<img src='download.png'>" + "</a></center>")
+        
+        print('</td>')        
+        
+        # dritte Spalte
+        print('<td>')
+        
+        if loc=="de":   print("<center><a href='index.py?del=" + b[0] + "' onclick='return confirm(" + '"' + "Soll das Projekt "  + b[1] + ' wirklich gel&ouml;scht werden?"'+")'><img src='remove.png'></a></center>")
+        elif loc=="fr": print("<center><a href='index.py?del=" + b[0] + "' onclick='return confirm(" + '"' + "Voulez-vous vraiment supprimer le projet "  + b[1] + '?"'+")'><img src='remove.png'></a></center>")
+        else:           print("<center><a href='index.py?del=" + b[0] + "' onclick='return confirm(" + '"' + "Do you really want to delete "  + b[1] + '?"'+")'><img src='remove.png'></a></center>")
+        
+        print('</td>')
+        
+        # Ende der Zeile
+        print('</tr')
+    
+    # Ende divTableBody
+    print('</tbody>')
+    # Ende divTable
+    print('</table>')
+        
     print("<hr /><br>")
     
     if loc=="de":
