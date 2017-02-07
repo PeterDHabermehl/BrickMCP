@@ -12,6 +12,10 @@ import zipfile as z
 hostdir = os.path.dirname(os.path.realpath(__file__)) + "/"
 brickdir = hostdir + "../1f2d90a3-11e9-4a92-955a-73ffaec0fe71/user/"
 
+# für die Entwicklungsumgebung PeH
+if not os.path.exists(brickdir):
+    brickdir = hostdir + "../../1f2d90a3-11e9-4a92-955a-73ffaec0fe71/user/"
+    
 def run_program(rcmd):
     """
     Runs a program, and it's paramters (e.g. rcmd="ls -lh /var/www")
@@ -65,6 +69,26 @@ def scan_brickly():
                 if name != "": bricks.append((l,name))
                 
         bricks=sorted(bricks, key=getkey)   
+
+def brickly_not_found():
+    # html head ausgeben
+    if loc=="de":        ba.htmlhead("BrickMCP", "Verwalte Deine Brickly Projekte")
+    elif loc=="fr":      ba.htmlhead("BrickMCP", "Organiser vos projets Brickly")
+    else:                ba.htmlhead("BrickMCP", "Manage your Brickly projects")
+    
+    print("</p><hr></p>")
+    
+    if loc=="de":        print("Brickly konnte auf diesem TXT nicht gefunden werden!")
+    elif loc=="fr":      print("Brickly introuvable sur ce TXT.")
+    else:                print("Brickly could not be found on this TXT.")
+
+    print("</p><hr></p>")
+
+    # html abschließen
+    if loc=="de":        ba.htmlfoot("",  "/",  "TXT Home")
+    elif loc=="fr":      ba.htmlfoot("",  "/",  "TXT Home")
+    else:                ba.htmlfoot("",  "/",  "TXT Home")
+
 
 def indexpage():
     # html head ausgeben
@@ -122,7 +146,11 @@ def indexpage():
         print('</tr')
     
     # Ende divTableBody
+    if loc=="de":       print('<tr><td colspan="3"><center>Ende der Liste</center></td></tr')
+    elif loc=="fr":     print('<tr><td colspan="3"><center>Fin de la liste</center></td></tr>')
+    else:               print('<tr><td colspan="3"><center>End of the list</center></td></tr>')
     print('</tbody>')
+    
     # Ende divTable
     print('</table>')
         
@@ -210,7 +238,7 @@ def remove(brick):
 # *****************************************************
 
 if __name__ == "__main__":
-    
+   
     form = cgi.FieldStorage()
     
     loc=""
@@ -235,6 +263,12 @@ if __name__ == "__main__":
 
     if loc=="": loc="en"
     
+    # Abbrechen, wenn Brickly nicht installiert...
+    
+    if not os.path.exists(brickdir):
+        brickly_not_found()
+        exit()
+
 
     if "del" in form:
         remove(form["del"].value)
