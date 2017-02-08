@@ -130,7 +130,7 @@ def lock():
     
     print("<br><hr /><br><b>")
     
-    if loc=="de":       print('BrickMCP wird durch ein Passwort gesperrt. Entsperren ist nur mit diesem Passwort m&oouml;glich.')
+    if loc=="de":       print('BrickMCP wird durch ein Passwort gesperrt. Entsperren ist nur mit diesem Passwort m&ouml;glich.')
     elif loc=="fr":     print('BrickMCP est verrouill&eacute; par un mot de passe. Le d&eacute;verrouillage est seulement possible avec ce mot de passe.')
     else:               print('BrickMCP will be locked with a password. Unlocking is only possible by entering the password.')   
     
