@@ -15,6 +15,12 @@ import xml.etree.ElementTree as et
 hostdir = os.path.dirname(os.path.realpath(__file__)) + "/"
 local = ""
 
+brickdir = hostdir + "../1f2d90a3-11e9-4a92-955a-73ffaec0fe71/user/"
+
+# für die Entwicklungsumgebung PeH
+if not os.path.exists(brickdir):
+    brickdir = hostdir + "../../1f2d90a3-11e9-4a92-955a-73ffaec0fe71/user/"
+
 def run_program(rcmd):
     """
     Runs a program, and it's paramters (e.g. rcmd="ls -lh /var/www")
@@ -97,6 +103,87 @@ def htmlfoot(message:str, footlink:str, footlinktext:str):
     print('<p/><a href="' + footlink + '">' + footlinktext + "</a>")
     print("</body></html>")
 
+def confirm_lock():
+    # html head ausgeben
+    if loc=="de":        htmlhead("BrickMCP", "Verwalte Deine Brickly Projekte")
+    elif loc=="fr":      htmlhead("BrickMCP", "Organiser vos projets Brickly")
+    else:                htmlhead("BrickMCP", "Manage your Brickly projects")
+    
+    print("<br><hr /><br><b>")
+    
+    if loc=="de":       print('BrickMCP ist jetzt gesperrt. Entsperren ist nur mit dem Passwort m&ouml;glich.')
+    elif loc=="fr":     print('BrickMCP est verrouill&eacute;. Le d&eacute;verrouillage est seulement possible avec le mot de passe.')
+    else:               print('BrickMCP is now locked. Unlocking is only possible by entering the password.')  
+    
+    print("<br><br><hr /><br>")
+    
+    if loc=="de":        htmlfoot("", "index.py",    "Okay")
+    elif loc=="fr":      htmlfoot("", "index.py",    "Compris")
+    else:                htmlfoot("", "index.py",    "Okay")
+
+
+def lock():
+    # html head ausgeben
+    if loc=="de":        htmlhead("BrickMCP", "Verwalte Deine Brickly Projekte")
+    elif loc=="fr":      htmlhead("BrickMCP", "Organiser vos projets Brickly")
+    else:                htmlhead("BrickMCP", "Manage your Brickly projects")
+    
+    print("<br><hr /><br><b>")
+    
+    if loc=="de":       print('BrickMCP wird durch ein Passwort gesperrt. Entsperren ist nur mit diesem Passwort m&oouml;glich.')
+    elif loc=="fr":     print('BrickMCP est verrouill&eacute; par un mot de passe. Le d&eacute;verrouillage est seulement possible avec ce mot de passe.')
+    else:               print('BrickMCP will be locked with a password. Unlocking is only possible by entering the password.')   
+    
+    print("</b><br>")
+
+    print('<form action="ba.py" method="post" enctype="multipart/form-data">')
+    print('<input name="lockTXT" type="hidden" value="False">')
+    print('<table border="0"><tr><td style="text-align: right;">')
+    
+    if loc=="de":
+        print('<label>Passwort zum Sperren:<input name="password" type="password" size=12></label><br>')
+        print('<label>Passwort best&auml;tigen:<input name="confpass" type="password" size=12></label>')
+        print('</td><td>')
+        print('<button type="submit"><img src="icons/document-encrypt.png" alt="Sperren"></button>')
+    elif loc=="fr":
+        print('<label>Mot de passe pour verrouiller:<input name="password" type="password" size=12></label><br>')
+        print('<label>Confirmer le mot de passe:<input name="confpass" type="password" size=12></label>')
+        print('</td><td>')
+        print('<button type="submit"><img src="icons/document-encrypt.png" alt="Verroulier"></button>')
+    else:
+        print('<label>Enter password to lock:<input name="password" type="password" size=12></label><br>')
+        print('<label>Confirm password:      <input name="confpass" type="password" size=12></label>')
+        print('</td><td>')
+        print('<button type="submit"><img src="icons/document-encrypt.png" alt="Lock"></button>')
+    
+    print('</td></tr></table>')
+    print('</form>')
+
+    print("<br><hr /><br>")
+    
+    if loc=="de":        htmlfoot("", "index.py",    "Nicht verriegeln")
+    elif loc=="fr":      htmlfoot("", "index.py",    "Ne pas verrouiller")
+    else:                htmlfoot("", "index.py",    "Do not lock")
+
+def pwfail():
+    
+    # html head ausgeben
+    if loc=="de":        htmlhead("BrickMCP", "Verwalte Deine Brickly Projekte")
+    elif loc=="fr":      htmlhead("BrickMCP", "Organiser vos projets Brickly")
+    else:                htmlhead("BrickMCP", "Manage your Brickly projects")
+    
+    print("<br><hr /><br><b>")
+
+    if loc=="de":       print('Passw&ouml;rter stimmen nicht &uuml;berein! Bitte nochmal versuchen.')
+    elif loc=="fr":     print('Les mots de passe ne correspondent pas. S&rsquo;il vous pla&icirc;t essayer &agrave; nouveau.')
+    else:               print('Passwords do not match. Please try again.')   
+    
+    print("<br><br><hr /><br><b>")
+
+    if loc=="de":        htmlfoot("", "ba.py?lockTXT=True",    "Nochmal versuchen")
+    elif loc=="fr":      htmlfoot("", "ba.py?lockTXT=True",    "De nouveau")
+    else:                htmlfoot("", "ba.py?lockTXT=True",    "Try again")
+
 def clean(newdir,maxlen):
     res=""
     valid="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_-."
@@ -111,6 +198,14 @@ def clean(newdir,maxlen):
 if __name__ == "__main__":
     
     form = cgi.FieldStorage()
+
+    if os.path.isfile(".locale"):
+        f = open(".locale","r")
+        loc = f.read()
+        f.close()
+
+    if loc=="": loc="en"
+    
     
     if ("file" in form) and ("path" in form):
         path=form["path"].value
@@ -139,13 +234,24 @@ if __name__ == "__main__":
                 if os.path.isfile(".py"):
                     fi.write(".py")
                     os.remove(".py")
-                fi.writestr(".readme","Brickly ZIP file created by BrickMCP")
+                fi.wrbitestr(".readme","Brickly ZIP file created by BrickMCP")
             fi.close()
             send_file(path,"Brickly-"+name+".zip")
             os.remove("Brickly-"+name+".zip")
             os.chdir(m)
         else:
             send_file(form["path"].value, form["file"].value)
+    elif "confpass" in form:
+        if form["password"].value==form["confpass"].value:
+            f=open(brickdir+".mcplock","w")
+            f.write(form["password"].value)
+            f.close()
+            confirm_lock()
+        else:
+            pwfail()
+    elif "lockTXT" in form:
+        if form["lockTXT"].value=="True":
+            lock()
     else:
             print('Content-Type: text/html')
             print('')

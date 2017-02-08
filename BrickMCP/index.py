@@ -171,8 +171,28 @@ def indexpage():
         print('<label>Select a Brickly project to upload to the TXT (*zip):')
         print('<input name="datei" type="file" size="50" accept="application/zip,application/x-zip,application/x-zip-compressed"> </label>')
         print('<button type="submit">Upload</button></form>')
+
+    # lock-funktion
+    print("<br><hr /><br>")
+    
+    print('<table border="0"><tr><td>')
+    
+    print('<a href="ba.py?lockTXT=True">')
+    print('<img src="icons/document-encrypt.png"></a>')
+    print('</td><td>')
+    
+    if loc=="de":
+        print('BrickMCP auf diesem TXT verriegeln - Zugriff mit BrickMCP ist dann gesperrt.<br>Projekte in Brickly selbst k&ouml;nnen aber bearbeitet werden.')
+    elif loc=="fr":
+        print("Serrure BrickMCP sur cet appareil - L&rsquo;acc&egrave;s &agrave; BrickMCP est alors verrouill&eacute;.<br>Projets en Brickly lui-m&ecirc;me mais peuvent &ecirc;tre modifi&eacute;s.")
+    else:
+        print('Lock BrickMCP on this TXT - Access with BrickMCP will be blocked.<br>Projects can still be accessed within Brickly itself.')
+    
+    print('</td></tr></table>')
+    
+    # html abschließen    
+    print("<br><hr /><br>")
         
-    # html abschließen
     if loc=="de":        ba.htmlfoot("Viel Spa&szlig;",        "/",    "TXT Home")
     elif loc=="fr":      ba.htmlfoot("Amusez-vous",      "/",    "TXT Home")
     else:                ba.htmlfoot("Have fun",         "/",    "TXT Home")
@@ -231,8 +251,54 @@ def remove(brick):
 
 
     os.chdir(m)
-   
+
+def locked():
+    # html head ausgeben
+    if loc=="de":        ba.htmlhead("BrickMCP", "Verwalte Deine Brickly Projekte")
+    elif loc=="fr":      ba.htmlhead("BrickMCP", "Organiser vos projets Brickly")
+    else:                ba.htmlhead("BrickMCP", "Manage your Brickly projects")
     
+    print("<br><hr /><br><b>")
+    
+    if loc=="de":       print('BrickMCP ist auf diesem Ger&auml;t gesperrt.')
+    elif loc=="fr":     print('BrickMCP est verrouill&eacute; sur cet appareil')
+    else:               print('BrickMCP is locked on this TXT.')   
+    
+    print("</b><br>")
+
+    print('<form action="index.py" method="post" enctype="multipart/form-data">')
+    print('<input name="lockTXT" type="hidden" value="False">')
+    print('<table border="0"><tr><td>')
+    
+    if loc=="de":
+        print('<label>Passwort zum Entsperren:')
+        print('<input name="password" type="password" size=12> </label>')
+        print('</td><td>')
+        print('<button type="submit"><img src="icons/document-decrypt.png" alt="Entsperren"></button>')
+    elif loc=="fr":
+        print('<label>Enter password to unlock:')
+        print('<input name="password" type="password" size=12> </label>')
+        print('</td><td>')
+        print('<button type="submit"><img src="icons/document-decrypt.png" alt="Unlock"></button>')
+    else:
+        print('<label>Enter password to unlock:')
+        print('<input name="password" type="password" size=12> </label>')
+        print('</td><td>')
+        print('<button type="submit"><img src="icons/document-decrypt.png" alt="Unlock"></button>')
+    
+    print('</td></tr></table>')
+    print('</form>')
+
+    print("<br><hr /><br>")
+    
+    if loc=="de":        ba.htmlfoot("", "/",    "TXT Home")
+    elif loc=="fr":      ba.htmlfoot("", "/",    "TXT Home")
+    else:                ba.htmlfoot("", "/",    "TXT Home")
+
+
+
+
+
 # *****************************************************
 # *************** Ab hier geht's los ******************
 # *****************************************************
@@ -268,8 +334,23 @@ if __name__ == "__main__":
     if not os.path.exists(brickdir):
         brickly_not_found()
         exit()
-
-
+    
+    # Überprüfen, ob BrickMCP gelockt ist...
+    
+    if "lockTXT" in form:
+        if form["lockTXT"].value=="False":
+            f=open(brickdir+".mcplock","r")
+            if form["password"].value==f.read():
+                f.close()
+                os.remove(brickdir+".mcplock")
+            else:
+                f.close()
+    
+    if os.path.exists(brickdir+".mcplock"):
+        locked()
+        exit()
+        
+    # ab hier dann arbeiten...
     if "del" in form:
         remove(form["del"].value)
         indexpage()
@@ -278,3 +359,4 @@ if __name__ == "__main__":
         indexpage()
     else:
         indexpage()
+        
