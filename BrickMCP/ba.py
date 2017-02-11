@@ -184,6 +184,51 @@ def pwfail():
     elif loc=="fr":      htmlfoot("", "ba.py?lockTXT=True",    "De nouveau")
     else:                htmlfoot("", "ba.py?lockTXT=True",    "Try again")
 
+def do_brickpack(path:str, bf:str):
+    m=os.getcwd()
+    os.chdir(path)
+    
+    s1=0
+    if os.path.isfile(os.path.basename(bf)):
+        shutil.copyfile(os.path.basename(bf), ".xml")
+        s1=os.path.getsize(".xml") % 171072
+    if os.path.isfile(os.path.basename(bf)[:-4]+".py"):
+        shutil.copyfile(os.path.basename(bf)[:-4]+".py", ".py")
+        s1=s1+os.path.getsize(".py") % 171072
+    
+    vers="n/a"
+    if os.path.exists("../manifest"):
+        fi=open("../manifest","r")
+        r =fi.readline()
+        while r!="":
+            if "version" in r: vers = r
+            r=fi.readline()
+        fi.close()
+        
+    name=""
+    xml=et.parse(bf).getroot()
+    for child in xml:
+        # remove any namespace from the tag
+        if '}' in child.tag: child.tag = child.tag.split('}', 1)[1]
+        if child.tag == "settings" and 'name' in child.attrib:
+            name = child.attrib['name']           
+    
+    fi = z.ZipFile("Brickly-"+name+".zip","w")
+    if os.path.isfile(".xml"):
+        fi.write(".xml")
+        os.remove(".xml")
+        if os.path.isfile(".py"):
+            fi.write(".py")
+            os.remove(".py")
+        fi.writestr(".readme","Brickly ZIP file created by BrickMCP")
+        fi.writestr(".mcpchecksum",str(s1))
+        fi.writestr(".bricklyversion",vers)
+    fi.close()
+    send_file(path,"Brickly-"+name+".zip")
+    os.remove("Brickly-"+name+".zip")
+    os.chdir(m)
+
+
 def clean(newdir,maxlen):
     res=""
     valid="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_-."
@@ -211,34 +256,7 @@ if __name__ == "__main__":
         path=form["path"].value
         bf = form["file"].value
         if "brickpack" in form:
-            m=os.getcwd()
-            os.chdir(path)
-            
-            if os.path.isfile(os.path.basename(bf)):
-                shutil.copyfile(os.path.basename(bf), ".xml")
-            if os.path.isfile(os.path.basename(bf)[:-4]+".py"):
-                shutil.copyfile(os.path.basename(bf)[:-4]+".py", ".py")
-            
-            name=""
-            xml=et.parse(bf).getroot()
-            for child in xml:
-                # remove any namespace from the tag
-                if '}' in child.tag: child.tag = child.tag.split('}', 1)[1]
-                if child.tag == "settings" and 'name' in child.attrib:
-                    name = child.attrib['name']           
-            
-            fi = z.ZipFile("Brickly-"+name+".zip","w")
-            if os.path.isfile(".xml"):
-                fi.write(".xml")
-                os.remove(".xml")
-                if os.path.isfile(".py"):
-                    fi.write(".py")
-                    os.remove(".py")
-                fi.wrbitestr(".readme","Brickly ZIP file created by BrickMCP")
-            fi.close()
-            send_file(path,"Brickly-"+name+".zip")
-            os.remove("Brickly-"+name+".zip")
-            os.chdir(m)
+            do_brickpack(path,bf)
         else:
             send_file(form["path"].value, form["file"].value)
     elif "confpass" in form:
@@ -257,4 +275,4 @@ if __name__ == "__main__":
             print('')
             print('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">')
             print('<html xmlns="http://www.w3.org/1999/xhtml">')
-            print('<head></head><body>cgi script error. did not receive filename or path for download.</body></html>')
+            print('<head></head><body>cgi script error. wrong objective or unknown command.</body></html>')
