@@ -110,6 +110,9 @@ def indexpage():
     
 
     
+    # vtab
+    print('<table border="0"><tr><td width="48px"></td><td>')
+    
     print('<table width="500px" border="0" rules="rows" cellpadding="5">')
     print('<thead><tr>')
     
@@ -177,17 +180,19 @@ def indexpage():
         print('</tr>')
     
     # Ende divTableBody
-    if loc=="de":       print('<tr><td colspan="3"><center>Ende der Liste</center></td></tr')
-    elif loc=="fr":     print('<tr><td colspan="3"><center>Fin de la liste</center></td></tr>')
-    else:               print('<tr><td colspan="3"><center>End of the list</center></td></tr>')
+    if loc=="de":       print('<tr><td colspan="5"><center>Ende der Liste</center></td></tr')
+    elif loc=="fr":     print('<tr><td colspan="5"><center>Fin de la liste</center></td></tr>')
+    else:               print('<tr><td colspan="5"><center>End of the list</center></td></tr>')
     print('</tbody>')
     
     # Ende divTable
     print('</table>')
 
     print('</div>')
+    
+    print('</td><td align="center">')    
     print('<a href="index.py"><img src="icons/view-refresh.png"></a><br>')
-        
+    print('</td></tr></table>')    
         
     print("<hr /><br>")
     
@@ -229,12 +234,8 @@ def indexpage():
     # html abschließen    
     print("<br><hr /><br>")
     
-    print("<a href='../1f2d90a3-11e9-4a92-955a-73ffaec0fe71/index.html'>--&gt;Brickly</a><br>")
-    
-    
-    if loc=="de":        ba.htmlfoot("Viel Spa&szlig;",        "/",    "TXT Home")
-    elif loc=="fr":      ba.htmlfoot("Amusez-vous",      "/",    "TXT Home")
-    else:                ba.htmlfoot("Have fun",         "/",    "TXT Home")
+    print("<a href='../1f2d90a3-11e9-4a92-955a-73ffaec0fe71/index.html'>[ Brickly ]</a><br>")
+    ba.htmlfoot("", "/", "[ TXT Home] ")
 
 def cleanup():
     if os.path.isfile(".xml"):
