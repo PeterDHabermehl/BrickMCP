@@ -110,29 +110,29 @@ def indexpage():
     
 
     
-    print('<table width="360px" border="0" rules="rows" cellpadding="5">')
+    print('<table width="500px" border="0" rules="rows" cellpadding="5">')
     print('<thead><tr>')
     
-    if loc=="de":       print('<th width="50%">Projekt</th><th>Download</th><th>Sch&uuml;tzen</th>'+
+    if loc=="de":       print('<th width="20%">Projekt</th><th>Download</th><th>Sch&uuml;tzen</th>'+
                               '<th>Anheften</th><th>L&ouml;schen</th><th width="20px"></th></tr>')
-    elif loc=="fr":     print('<th width="50%">Projet</th><th>T&eacute;l&eacute;charger</th><th>Extinguible</th>'+
+    elif loc=="fr":     print('<th width="20%">Projet</th><th>T&eacute;l&eacute;charger</th><th>Extinguible</th>'+
                               '<th>Attacher</th><th>Supprimer</th><th width="20px"></th></tr>')
-    else:               print('<th width="50%">Project</th><th>Download</th><th>Deleteable</th>'+
+    else:               print('<th width="20%">Project</th><th>Download</th><th>Deleteable</th>'+
                               '<th>Sticky</th><th>Remove</th><th width="20px"></th></tr>')
     
     print('</thead>')
     print('</table>')
     
-    print('<div style="height:110px; width:360px; overflow:auto;">')
+    print('<div style="height:110px; width:500px; overflow:auto;">')
     
-    print('<table width="340px" border="1" rules="rows" cellpadding="5">')
+    print('<table width="480px" border="1" rules="rows" cellpadding="5">')
     
     for b in bricks:
         
         print('<tr>')
         
         # erste Spalte
-        print('<td width="50%">')
+        print('<td width="20%">')
         
         print("<a href='ba.py?file=" + b[0] + "&path=" + brickdir + "&brickpack=True'>" + b[1] + "</a>")
         
