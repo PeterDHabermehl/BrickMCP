@@ -510,6 +510,7 @@ def change_lock(brick:str):
                 st=f.read()
                 f.close()
             st=st.replace('deletable="false" ', '')
+            st=st.replace(' deletable="false"', '')
             with open(brick, 'w', encoding="utf-8") as fi:
                 fi.write(st)
                 fi.close()
@@ -519,6 +520,7 @@ def change_lock(brick:str):
                 f.close()
             if 'deletable="true" ' in st:
                 st=st.replace('deletable="true" ', '')
+                st=st.replace(' deletable="true"', '')
                 st=st.replace('<block ', '<block deletable="false" ')
             else:  st=st.replace('<block ', '<block deletable="false" ')    
             with open(brick, 'w', encoding="utf-8") as fi:
@@ -539,6 +541,7 @@ def change_move(brick:str):
                 st=f.read()
                 f.close()
             st=st.replace('movable="false" ', '')
+            st=st.replace(' movable="false"', '')
             with open(brick, 'w', encoding="utf-8") as fi:
                 fi.write(st)
                 fi.close()
@@ -548,6 +551,7 @@ def change_move(brick:str):
                 f.close()
             if 'movable="true" ' in st:
                 st=st.replace('movable="true" ', '')
+                st=st.replace(' movable="true"', '')
                 st=st.replace('<block ', '<block movable="false" ')
             else:  st=st.replace('<block ', '<block movable="false" ')    
             with open(brick, 'w', encoding="utf-8") as fi:
