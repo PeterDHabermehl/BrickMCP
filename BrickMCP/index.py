@@ -162,9 +162,9 @@ def indexpage():
         print('<td width="20%">')
         
         print("<a href='ba.py?file=" + b[0] + "&path=" + brickdir + "&brickpack=True'>")
-        x1=b[1]
-        x1=htmlEncode(x1).encode('ascii', 'xmlcharrefreplace')
-        ff=x1.decode('ascii')
+       
+        ff=htmlEncode(b[1]).encode('ascii', 'xmlcharrefreplace').decode('ascii')
+        
         print(ff)
         print("</a>")
         
