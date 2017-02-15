@@ -92,6 +92,9 @@ def scan_brickly():
                 
         bricks=sorted(bricks, key=getkey)   
 
+def htmlDecode(str):
+    return str.replace("&quot;", '"').replace("&#39;", "'").replace("&lt;", '<').replace("&gt;", '>').replace("&amp;", '&');
+
 def brickly_not_found():
     # html head ausgeben
     if loc=="de":        ba.htmlhead("BrickMCP", "Verwalte Deine Brickly Projekte")
@@ -156,7 +159,7 @@ def indexpage():
         print('<td width="20%">')
         
         print("<a href='ba.py?file=" + b[0] + "&path=" + brickdir + "&brickpack=True'>")
-        ff=b[1].encode('ascii', 'xmlcharrefreplace').decode('ascii')
+        ff=htmlDecode(b[1].encode('ascii', 'xmlcharrefreplace').decode('ascii'))
         print(ff)
         print("</a>")
         
