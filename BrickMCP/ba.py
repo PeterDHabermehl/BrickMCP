@@ -10,7 +10,6 @@ import cgi, shutil
 import sys, os, shlex, time
 import zipfile as z
 from string import *
-import xml.etree.ElementTree as et
 
 hostdir = os.path.dirname(os.path.realpath(__file__)) + "/"
 local = ""
@@ -207,12 +206,25 @@ def do_brickpack(path:str, bf:str):
         fi.close()
         
     name=""
-    xml=et.parse(bf).getroot()
-    for child in xml:
-        # remove any namespace from the tag
-        if '}' in child.tag: child.tag = child.tag.split('}', 1)[1]
-        if child.tag == "settings" and 'name' in child.attrib:
-            name = child.attrib['name']           
+
+    with open(bf,"r", encoding="utf-8") as f:
+      
+        d=f.read()
+        f.close()
+        
+        if "<settings " in d:
+            d=d[ (d.index("<settings "))+10 : ]
+            
+        if 'name="' in d:
+            d=d[d.index('name="')+6:]
+            name=d[:d.index('"')]
+            
+        elif "name='" in d:
+            d=d[d.index("name='")+6:]
+            name=d[:d.index("'")-1]
+    
+    
+    
     
     fi = z.ZipFile("Brickly-"+name+".zip","w")
     if os.path.isfile(".xml"):
