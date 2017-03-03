@@ -226,7 +226,7 @@ def do_brickpack(path:str, bf:str):
     
     
     #g=open("Brickly-"+name+".zip","w")#, encoding="UTF-8")
-    bn = name #asciify(name)
+    bn = asciify(name)
     fi = z.ZipFile("Brickly-" + bn + ".zip", "w")
     if os.path.isfile(".xml"):
         fi.write(".xml")
@@ -238,9 +238,7 @@ def do_brickpack(path:str, bf:str):
         fi.writestr(".mcpchecksum",str(s1))
         fi.writestr(".bricklyversion",vers)
     fi.close()
-    #send_file(path,"Brickly-"+name+".zip")
     send_file(path,"Brickly-"+bn+".zip")
-    #os.remove("Brickly-"+name+".zip")
     os.remove("Brickly-"+bn+".zip")
     os.chdir(m)
 
@@ -252,6 +250,7 @@ def asciify(name):
     
     for ch in name:
         if ch in valid: res=res+ch
+        else: res=res+"-"
     return res   
 
 def clean(newdir,maxlen):

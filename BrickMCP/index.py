@@ -304,7 +304,6 @@ def upload(fileitem):
           upload_error("nab")
           return
         
-    #zf.extractall()
     if ".xml" in zf.namelist():
         zf.extract(".xml")
     else: 
