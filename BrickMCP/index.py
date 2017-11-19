@@ -5,14 +5,14 @@
 import cgi, shutil
 import sys, os, socket
 import ba
-#import xml.etree.ElementTree as et
 import zipfile as z
 import cgitb
 
 cgitb.enable()
 
 hostdir = os.path.dirname(os.path.realpath(__file__)) + "/"
-brickdir = hostdir + "../1f2d90a3-11e9-4a92-955a-73ffaec0fe71/user/"
+#brickdir = hostdir + "../1f2d90a3-11e9-4a92-955a-73ffaec0fe71/user/"
+brickdir = hostdir[:-37] + "1f2d90a3-11e9-4a92-955a-73ffaec0fe71/user/"
 
 # für die Entwicklungsumgebung PeH
 if not os.path.exists(brickdir):
@@ -193,9 +193,9 @@ def indexpage():
         # fünfte Spalte
         print('<td>')
         
-        if loc=="de":   print("<center><a href='index.py?del=" + b[0] + "' onclick='return confirm(" + '"' + "Soll das Projekt "  + ff + ' wirklich gel&ouml;scht werden?"'+")'><img src='remove.png'></a></center>")
-        elif loc=="fr": print("<center><a href='index.py?del=" + b[0] + "' onclick='return confirm(" + '"' + "Voulez-vous vraiment supprimer le projet "  + ff + '?"'+")'><img src='remove.png'></a></center>")
-        else:           print("<center><a href='index.py?del=" + b[0] + "' onclick='return confirm(" + '"' + "Do you really want to delete "  + ff + '?"'+")'><img src='remove.png'></a></center>")
+        if loc=="de":   print("<center><a href='index.py?del=" + b[0] + "' onclick='return confirm(" + '"' + "Soll das Projekt "  + ff + ' wirklich gel&ouml;scht werden?"'+")'><img src='icons/remove.png'></a></center>")
+        elif loc=="fr": print("<center><a href='index.py?del=" + b[0] + "' onclick='return confirm(" + '"' + "Voulez-vous vraiment supprimer le projet "  + ff + '?"'+")'><img src='icons/remove.png'></a></center>")
+        else:           print("<center><a href='index.py?del=" + b[0] + "' onclick='return confirm(" + '"' + "Do you really want to delete "  + ff + '?"'+")'><img src='icons/remove.png'></a></center>")
         
         print('</td>')
         
